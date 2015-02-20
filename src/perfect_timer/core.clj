@@ -4,10 +4,6 @@
 
 (native!)
 
-(def main_frame (frame :title "Perfect Timer"))
-
-
-(-> main_frame pack! show!)
 
 
 (def status_label (label))
@@ -21,12 +17,21 @@
                       :items [status_label input_field start_button reset_button]))
 
 
-(config! main_frame :content grid)
 
 
-; XXX clojure timer needed
+; XXX clojure timer needed: need to update the GUI every sec or so
+(System/currentTimeMillis)
+
+
+
+
 
 (defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+  (invoke-later
+   (->
+    (frame
+     :title "Perfect Timer"
+     ;; :on-close :exit
+     :content grid)
+    pack!
+    show!)))
