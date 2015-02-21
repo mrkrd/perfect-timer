@@ -1,5 +1,6 @@
 (ns perfect-timer.core
   (:use seesaw.core)
+  (:use overtone.at-at)
   (:gen-class))
 
 (native!)
@@ -22,11 +23,17 @@
 ; XXX clojure timer needed: need to update the GUI every sec or so
 (System/currentTimeMillis)
 
+(defn tick []
+  (config! status_label :text (System/currentTimeMillis) 1000))
 
 
+(def my-pool (mk-pool))
+;(every 1000 #(println "I am cool!") my-pool)
+(every 1000 tick my-pool)
+(stop-and-reset-pool! my-pool)
 
 
-(defn -main
+(defn -main [& args]
   (invoke-later
    (->
     (frame
