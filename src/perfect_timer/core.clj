@@ -7,7 +7,6 @@
 ;(use 'seesaw.dev)
 ;(seesaw.dev/debug!)
 
-(def status-label (label :halign :center))
 (def input-field (text :text "1800"
                        :halign :center))
 (def start-button (button :text "Start"))
@@ -16,9 +15,8 @@
 
 
 (def grid (grid-panel :columns 2
-                      :items [status-label input-field
-                              start-button reset-button
-                              main-progress]))
+                      :items [input-field main-progress
+                              start-button reset-button]))
 
 
 (def state (atom {:starts []
@@ -59,6 +57,7 @@
 
 (defn reset-pressed [e]
   ;; UI changes
+  (config! input-field :text (/ (@state :tmax) 1000.))
   (config! input-field :editable? true)
   (config! start-button :text "Start")
   (config! main-progress :value 0)
@@ -74,16 +73,19 @@
 
 (defn tick []
   (let [starts (@state :starts)
+        tmax (@state :tmax)
         pauses (conj (@state :pauses) (System/currentTimeMillis))
         time-passed (reduce + (map - pauses starts))]
 
-    (config! status-label :text (format "%.1f" (/ time-passed 1000.0)))
+    (if (seq (@state :starts))
+      (config! input-field :text (format "%.1f" (/ (- tmax time-passed) 1000.0))))
+
     (config! main-progress :value time-passed)
 
     (if (> time-passed (@state :tmax))
       (do
-        (alert "Time's up!")
-        (reset-pressed nil)))))
+        (reset-pressed nil)
+        (alert "Time's up!")))))
 
 
 
