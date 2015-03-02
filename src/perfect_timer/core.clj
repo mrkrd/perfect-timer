@@ -8,11 +8,11 @@
 ;(seesaw.dev/debug!)
 
 (def status-label (label :halign :center))
-(def input-field (text :text "3600"
+(def input-field (text :text "1800"
                        :halign :center))
 (def start-button (button :text "Start"))
 (def reset-button (button :text "Reset"))
-(def main-progress (progress-bar :max 3600000))
+(def main-progress (progress-bar :max 1800000))
 
 
 (def grid (grid-panel :columns 2
