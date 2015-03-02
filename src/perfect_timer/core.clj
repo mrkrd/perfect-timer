@@ -7,8 +7,7 @@
 ;(use 'seesaw.dev)
 ;(seesaw.dev/debug!)
 
-(def status-label (label :h-text-position :center
-                         :v-text-position :center))
+(def status-label (label :halign :center))
 (def input-field (text :text "3600"
                        :halign :center))
 (def start-button (button :text "Start"))
