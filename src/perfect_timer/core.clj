@@ -7,8 +7,10 @@
 ;(use 'seesaw.dev)
 ;(seesaw.dev/debug!)
 
-(def status-label (label))
-(def input-field (text :text "3600"))
+(def status-label (label :h-text-position :center
+                         :v-text-position :center))
+(def input-field (text :text "3600"
+                       :halign :center))
 (def start-button (button :text "Start"))
 (def reset-button (button :text "Reset"))
 (def main-progress (progress-bar :max 3600000))
