@@ -9,3 +9,5 @@
 * DONE Default windows size
 
 * Bigger fonts
+
+* Ask r/clojure for feedback
