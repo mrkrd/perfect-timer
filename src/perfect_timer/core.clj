@@ -1,13 +1,20 @@
 (ns perfect-timer.core
   (:use seesaw.core)
+  (:use seesaw.font)
   (:gen-class))
 
 (native!)
 
 (def input-field (text :text "1800"
-                       :halign :center))
-(def start-button (button :text "Start"))
-(def reset-button (button :text "Reset"))
+                       :halign :center
+                       :font (font :size 26)))
+
+(def start-button (button :text "Start"
+                          :font (font :size 26)))
+
+(def reset-button (button :text "Reset"
+                          :font (font :size 26)))
+
 (def main-progress (progress-bar :max 1800000))
 
 
@@ -108,7 +115,7 @@
      :title "Perfect Timer"
      :on-close :exit
      :width 640
-     :height 400
+     :height 320
      :content grid)
     ;; pack!
     show!)))
