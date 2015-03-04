@@ -1,6 +1,6 @@
 # perfect-timer
 
-A simple timer app.
+A simple GUI timer app.
 
 It is also my first Clojure program, so your feedback is very welcome!
 
