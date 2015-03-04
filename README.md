@@ -19,12 +19,12 @@ It is also my first Clojure program, so your feedback is very welcome!
 
 2. Check out the git repo:
 
-    git clone https://github.com/mrkrd/perfect-timer.git
-    cd perfect-timer
+        git clone https://github.com/mrkrd/perfect-timer.git
+        cd perfect-timer
 
 3. Run through using Leiningen:
 
-    lein run
+        lein run
 
 
 
