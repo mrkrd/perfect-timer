@@ -6,6 +6,6 @@
 
 * Time's up's sound
 
-* Default windows size
+* DONE Default windows size
 
 * Bigger fonts

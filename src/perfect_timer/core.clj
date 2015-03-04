@@ -107,6 +107,8 @@
     (frame
      :title "Perfect Timer"
      :on-close :exit
+     :width 640
+     :height 400
      :content grid)
-    pack!
+    ;; pack!
     show!)))
