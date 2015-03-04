@@ -68,6 +68,16 @@
 ; (reset-listener)
 
 
+
+(defn key-input-pressed [e]
+  (if (= \newline (.getKeyChar e))
+    (start-pressed)))
+
+(def key-input-listener (listen input-field :key-typed key-input-pressed))
+; (key-input-listener)
+
+
+
 (defn tick []
   (let [starts (@state :starts)
         tmax (@state :tmax)
