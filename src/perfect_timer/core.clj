@@ -4,9 +4,6 @@
 
 (native!)
 
-;(use 'seesaw.dev)
-;(seesaw.dev/debug!)
-
 (def input-field (text :text "1800"
                        :halign :center))
 (def start-button (button :text "Start"))
