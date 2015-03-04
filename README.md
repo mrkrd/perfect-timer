@@ -30,8 +30,8 @@ It is also my first Clojure program, so your feedback is very welcome!
 
 ## Contribute & Support
 
-- Issue Tracker: github.com/mrkrd/perfect-timer/issues
-- Source Code: github.com/mrkrd/perfect-timer
+- Issue Tracker: https://github.com/mrkrd/perfect-timer/issues
+- Source Code: https://github.com/mrkrd/perfect-timer
 
 
 
