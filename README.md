@@ -2,14 +2,19 @@
 
 A simple GUI timer app.
 
-It is also my first Clojure program, so your feedback is very welcome!
-
+![screenshot](./screenshot.png)
 
 
 ## Features
 
 - GUI (Seesaw/Swing)
 - Basic start/pause/reset buttons
+
+
+### Anti-features (mostly due to JVM)
+
+- Long start-up time
+- Heavy memory usage
 
 
 
