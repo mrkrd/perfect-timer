@@ -17,7 +17,6 @@
 
 (def main-progress (progress-bar :max 1800000))
 
-
 (def grid (grid-panel :columns 2
                       :items [input-field main-progress
                               start-button reset-button]))
@@ -28,6 +27,16 @@
                   :tmax 0}))
 
 
+
+
+(defn ms-to-time-str [ms]
+  (let [seconds (quot ms 1000)
+        minutes (quot seconds 60)
+        hours (quot minutes 60)]
+    (format "%d:%02d:%02d" hours (rem minutes 60) (rem seconds 60))))
+
+
+
 (defn start-pressed []
   ;; UI changes
   (config! start-button :text "Pause")
@@ -36,7 +45,7 @@
   ;; State changes
   (if (empty? (@state :starts))            ; First press?
     (do
-      (swap! state assoc-in [:tmax] (* (read-string (config input-field :text)) 1000))
+      (swap! state assoc-in [:tmax] (int (* (read-string (config input-field :text)) 1000)))
       (config! main-progress :max (@state :tmax))))
   (swap! state update-in [:starts] conj (System/currentTimeMillis)))
 
@@ -50,6 +59,7 @@
   (swap! state update-in [:pauses] conj (System/currentTimeMillis)))
 
 
+
 (defn start-or-pause-pressed [e]
   (if (> (count (@state :starts)) (count (@state :pauses)))
     (pause-pressed)
@@ -59,9 +69,10 @@
 ; (start-listener)
 
 
+
 (defn reset-pressed [e]
   ;; UI changes
-  (config! input-field :text (/ (@state :tmax) 1000.))
+  (config! input-field :text (/ (@state :tmax) 1000))
   (config! input-field :editable? true)
   (config! start-button :text "Start")
   (config! main-progress :value 0)
@@ -69,7 +80,6 @@
   ;; State changes
   (swap! state assoc-in [:starts] [])
   (swap! state assoc-in [:pauses] []))
-
 
 (def reset-listener (listen reset-button :action reset-pressed))
 ; (reset-listener)
@@ -92,7 +102,7 @@
         time-passed (reduce + (map - pauses starts))]
 
     (if (seq (@state :starts))
-      (config! input-field :text (format "%.1f" (/ (- tmax time-passed) 1000.0))))
+      (config! input-field :text (ms-to-time-str (- tmax time-passed))))
 
     (config! main-progress :value time-passed)
 
@@ -100,8 +110,6 @@
       (do
         (reset-pressed nil)
         (alert "Time's up!")))))
-
-
 
 (def main-timer (timer (fn [e] (tick)) :delay 100))
 ; (.stop main-timer)
