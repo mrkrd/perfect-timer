@@ -41,6 +41,7 @@
   ;; UI changes
   (config! start-button :text "Pause")
   (config! input-field :editable? false)
+  (request-focus! start-button)
 
   ;; State changes
   (if (empty? (@state :starts))            ; First press?
