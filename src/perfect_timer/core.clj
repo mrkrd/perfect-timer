@@ -28,12 +28,13 @@
 
 
 
-
 (defn ms-to-time-str [ms]
-  (let [seconds (quot ms 1000)
-        minutes (quot seconds 60)
+  (let [tenths (quot ms 100)
+        minutes (quot tenths 600)
         hours (quot minutes 60)]
-    (format "%d:%02d:%02d" hours (rem minutes 60) (rem seconds 60))))
+    (format "%d:%02d:%04.1f" hours (rem minutes 60) (/ (rem tenths 600) 10.))))
+
+; (ms-to-time-str 3661200)
 
 
 
