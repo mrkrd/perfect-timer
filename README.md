@@ -11,7 +11,7 @@ A simple GUI timer app.
 - Basic start/pause/reset buttons
 
 
-### Anti-features (mostly due to JVM)
+### Anti-features (mostly due to JVM/Clojure overhead)
 
 - Long start-up time
 - Heavy memory usage
