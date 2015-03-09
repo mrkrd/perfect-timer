@@ -7,7 +7,7 @@
 
 (def input-field (text :text "1800"
                        :halign :center
-                       :font (font :size 26)))
+                       :font (font :size 40)))
 
 (def start-button (button :text "Start"
                           :font (font :size 26)))
