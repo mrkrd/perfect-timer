@@ -11,3 +11,18 @@
 * DONE Bigger fonts
 
 * Ask r/clojure for feedback
+* DONE Fix uberjar
+
+  lein hangs during compilation.  Similar issue:
+
+  https://github.com/technomancy/leiningen/issues/1501
+
+  Usually this means you're doing something at the top level that
+  should be inside `-main`.
+
+  <2015-03-12 Thu>
+
+  Has something to do with the timer: when moved inside of -main `lein
+  uberjar` worked.
+
+  I needed to move `timer` to `-main`.

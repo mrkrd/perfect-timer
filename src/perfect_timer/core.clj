@@ -103,18 +103,16 @@
         pauses (conj (@state :pauses) (System/currentTimeMillis))
         time-passed (reduce + (map - pauses starts))]
 
-    (if (seq (@state :starts))
+    (if (seq starts)
       (config! input-field :text (ms-to-time-str (- tmax time-passed))))
 
     (config! main-progress :value time-passed)
 
-    (if (> time-passed (@state :tmax))
+    (if (> time-passed tmax)
       (do
         (reset-pressed nil)
         (alert "Time's up!")))))
 
-(def main-timer (timer (fn [e] (tick)) :delay 100))
-; (.stop main-timer)
 
 
 
@@ -128,4 +126,7 @@
      :height 320
      :content grid)
     ;; pack!
-    show!)))
+    show!))
+
+  (def main-timer (timer (fn [e] (tick)) :delay 100)))
+  ;; (.stop main-timer)
