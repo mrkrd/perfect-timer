@@ -1,11 +1,15 @@
 (ns perfect-timer.core
-  (:use seesaw.core)
-  (:use seesaw.font)
+  (:use [perfect-timer.util]
+        [seesaw.core]
+        [seesaw.font])
   (:gen-class))
 
 (native!)
 
-(def input-field (text :text "1800"
+(def default-ms 1800000)
+
+
+(def input-field (text :text (ms-to-time-str default-ms)
                        :halign :center
                        :font (font :size 40)))
 
@@ -15,7 +19,7 @@
 (def reset-button (button :text "Reset"
                           :font (font :size 26)))
 
-(def main-progress (progress-bar :max 1800000))
+(def main-progress (progress-bar :max default-ms))
 
 (def grid (grid-panel :columns 2
                       :items [input-field main-progress
@@ -28,14 +32,6 @@
 
 
 
-(defn ms-to-time-str [ms]
-  (let [tenths (quot ms 100)
-        minutes (quot tenths 600)
-        hours (quot minutes 60)]
-    (format "%d:%02d:%04.1f" hours (rem minutes 60) (/ (rem tenths 600) 10.))))
-
-;; (ms-to-time-str 3661200)
-
 
 
 (defn start-pressed []
@@ -47,7 +43,7 @@
   ;; State changes
   (if (empty? (@state :starts))            ; First press?
     (do
-      (swap! state assoc-in [:tmax] (int (* (read-string (config input-field :text)) 1000)))
+      (swap! state assoc-in [:tmax] (time-str-to-ms (config input-field :text)))
       (config! main-progress :max (@state :tmax))))
   (swap! state update-in [:starts] conj (System/currentTimeMillis)))
 
@@ -67,14 +63,14 @@
     (pause-pressed)
     (start-pressed)))
 
-(def start-listener (listen start-button :action start-or-pause-pressed))
+(def start-listener (listen start-button :action #(start-or-pause-pressed %)))
 ; (start-listener)
 
 
 
 (defn reset-pressed [e]
   ;; UI changes
-  (config! input-field :text (/ (@state :tmax) 1000))
+  (config! input-field :text (ms-to-time-str (@state :tmax)))
   (config! input-field :editable? true)
   (config! start-button :text "Start")
   (config! main-progress :value 0)
@@ -83,7 +79,7 @@
   (swap! state assoc-in [:starts] [])
   (swap! state assoc-in [:pauses] []))
 
-(def reset-listener (listen reset-button :action reset-pressed))
+(def reset-listener (listen reset-button :action #(reset-pressed %)))
 ; (reset-listener)
 
 
@@ -128,5 +124,5 @@
     ;; pack!
     show!))
 
-  (def main-timer (timer (fn [e] (tick)) :delay 100)))
+  (def main-timer (timer (fn [e] (tick)) :delay 200)))
   ;; (.stop main-timer)
