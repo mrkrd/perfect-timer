@@ -28,7 +28,7 @@
 
 (def state (atom {:starts []
                   :pauses []
-                  :tmax 0}))
+                  :tmax default-ms}))
 
 
 
@@ -38,6 +38,7 @@
   ;; UI changes
   (config! start-button :text "Pause")
   (config! input-field :editable? false)
+  (config! input-field :background "#eeeeee")
   (request-focus! start-button)
 
   ;; State changes
@@ -72,6 +73,7 @@
   ;; UI changes
   (config! input-field :text (ms-to-time-str (@state :tmax)))
   (config! input-field :editable? true)
+  (config! input-field :background :white)
   (config! start-button :text "Start")
   (config! main-progress :value 0)
 
@@ -85,10 +87,17 @@
 
 
 (defn key-input-pressed [e]
-  (if (= \newline (.getKeyChar e))
-    (start-pressed)))
+  (condp = (.getKeyChar e)
+    \newline (when (time-str-to-ms (config input-field :text))
+               (start-pressed))
+    ;; `invoke-later` is necessary, because we get the key, before the
+    ;; text gets updated.
+    (invoke-later (if (time-str-to-ms (config input-field :text))
+      (config! input-field :background :white)
+      (config! input-field :background "#ee9999")))))
 
-(def key-input-listener (listen input-field :key-typed key-input-pressed))
+
+(def key-input-listener (listen input-field :key-typed #(key-input-pressed %)))
 ; (key-input-listener)
 
 
