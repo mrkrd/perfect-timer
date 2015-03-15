@@ -26,3 +26,8 @@
   uberjar` worked.
 
   I needed to move `timer` to `-main`.
+* Fix: ms int out of range
+
+  e.g. 123123123 h
+
+* Add tests for util functions
