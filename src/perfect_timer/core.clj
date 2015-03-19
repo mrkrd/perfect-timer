@@ -112,12 +112,9 @@
 
     (config! main-progress :value time-passed)
 
-    (if (> time-passed tmax)
-      (do
-        (reset-pressed nil)
-        (alert "Time's up!")))))
-
-
+    (when (> time-passed tmax)
+      (reset-pressed nil)
+      (alert "Time's up!"))))
 
 
 (defn -main [& args]
