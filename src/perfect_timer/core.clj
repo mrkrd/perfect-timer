@@ -129,5 +129,5 @@
     ;; pack!
     show!))
 
-  (def main-timer (timer (fn [e] (tick)) :delay 200)))
-  ;; (.stop main-timer)
+  (swap! state assoc :main-timer (timer (fn [e] (tick)) :delay 200)))
+  ;; (.stop (:main-timer @state))
