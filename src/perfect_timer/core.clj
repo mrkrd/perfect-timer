@@ -78,8 +78,7 @@
   (config! main-progress :value 0)
 
   ;; State changes
-  (swap! state assoc-in [:starts] [])
-  (swap! state assoc-in [:pauses] []))
+  (swap! state merge {:starts [], :pauses []}))
 
 (def reset-listener (listen reset-button :action #(reset-pressed %)))
 ; (reset-listener)
