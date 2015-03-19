@@ -102,9 +102,8 @@
 
 
 (defn tick []
-  (let [starts (@state :starts)
-        tmax (@state :tmax)
-        pauses (conj (@state :pauses) (System/currentTimeMillis))
+  (let [{:keys [starts tmax pauses]} @state
+        pauses (conj pauses (System/currentTimeMillis))
         time-passed (reduce + (map - pauses starts))]
 
     (if (seq starts)
