@@ -33,4 +33,6 @@ https://www.reddit.com/r/Clojure/comments/2ziogi/perfecttimer_my_first_clojure_a
 
   e.g. 123123123 h
 
-* Add tests for util functions
+* DONE Add tests for util functions
+
+[[file:test/perfect_timer/util_test.clj]]
