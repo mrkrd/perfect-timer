@@ -10,7 +10,10 @@
 
 * DONE Bigger fonts
 
-* Ask r/clojure for feedback
+* DONE Ask r/clojure for feedback
+
+https://www.reddit.com/r/Clojure/comments/2ziogi/perfecttimer_my_first_clojure_app_please_comment/
+
 * DONE Fix uberjar
 
   lein hangs during compilation.  Similar issue:
