@@ -1,4 +1,4 @@
-(ns perfect-timer.core-test
+(ns perfect-timer.util-test
   (:require [clojure.test :refer :all]
             [perfect-timer.util :refer :all]))
 
