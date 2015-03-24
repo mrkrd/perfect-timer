@@ -1,6 +1,5 @@
 (ns perfect-timer.audio
-  (:use [clojure.java.io :as io])
-
+  (:require [clojure.java.io :as io])
   (:import (javax.sound.sampled AudioSystem)))
 
 

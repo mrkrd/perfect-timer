@@ -1,9 +1,9 @@
 (ns perfect-timer.core
   (:use [perfect-timer.util]
         [perfect-timer.audio]
-        [clojure.java.io :as io]
-        [seesaw.core]
-        [seesaw.font])
+        [seesaw.core])
+  (:require [clojure.java.io :as io]
+            [seesaw.font :as font])
   (:gen-class))
 
 (native!)
@@ -13,13 +13,13 @@
 
 (def input-field (text :text (ms-to-time-str default-ms)
                        :halign :center
-                       :font (font :size 40)))
+                       :font (font/font :size 40)))
 
 (def start-button (button :text "Start"
-                          :font (font :size 26)))
+                          :font (font/font :size 26)))
 
 (def reset-button (button :text "Reset"
-                          :font (font :size 26)))
+                          :font (font/font :size 26)))
 
 (def main-progress (progress-bar :max default-ms))
 
@@ -66,7 +66,7 @@
     (start-pressed)))
 
 (def start-listener (listen start-button :action #(start-or-pause-pressed %)))
-; (start-listener)
+                                        ; (start-listener)
 
 
 
@@ -82,7 +82,7 @@
   (swap! state merge {:starts [], :pauses []}))
 
 (def reset-listener (listen reset-button :action #(reset-pressed %)))
-; (reset-listener)
+                                        ; (reset-listener)
 
 
 
@@ -93,12 +93,12 @@
     ;; `invoke-later` is necessary, because we get the key, before the
     ;; text gets updated.
     (invoke-later (if (time-str-to-ms (config input-field :text))
-      (config! input-field :background :white)
-      (config! input-field :background "#ee9999")))))
+                    (config! input-field :background :white)
+                    (config! input-field :background "#ee9999")))))
 
 
 (def key-input-listener (listen input-field :key-typed #(key-input-pressed %)))
-; (key-input-listener)
+                                        ; (key-input-listener)
 
 
 
@@ -107,7 +107,7 @@
         pauses (conj pauses (System/currentTimeMillis))
         time-passed (reduce + (map - pauses starts))]
 
-    (if (seq starts)
+    (when (seq starts)
       (config! input-field :text (ms-to-time-str (- tmax time-passed))))
 
     (config! main-progress :value time-passed)
@@ -133,4 +133,4 @@
     show!))
 
   (swap! state assoc :main-timer (timer (fn [e] (tick)) :delay 200)))
-  ;; (.stop (:main-timer @state))
+;; (.stop (:main-timer @state))
