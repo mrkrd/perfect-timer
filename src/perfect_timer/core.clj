@@ -1,5 +1,7 @@
 (ns perfect-timer.core
   (:use [perfect-timer.util]
+        [perfect-timer.audio]
+        [clojure.java.io :as io]
         [seesaw.core]
         [seesaw.font])
   (:gen-class))
@@ -112,7 +114,10 @@
 
     (when (> time-passed tmax)
       (reset-pressed nil)
-      (alert "Time's up!"))))
+      (play-sound (io/input-stream (io/resource "chirps.wav")))
+      (alert "Time's up!")
+      )))
+
 
 
 (defn -main [& args]
