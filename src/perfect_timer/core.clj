@@ -42,10 +42,9 @@
   (request-focus! start-button)
 
   ;; State changes
-  (if (empty? (@state :starts))            ; First press?
-    (do
-      (swap! state assoc-in [:tmax] (time-str-to-ms (config input-field :text)))
-      (config! main-progress :max (@state :tmax))))
+  (when (empty? (@state :starts))            ; First press?
+    (swap! state assoc-in [:tmax] (time-str-to-ms (config input-field :text)))
+    (config! main-progress :max (@state :tmax)))
   (swap! state update-in [:starts] conj (System/currentTimeMillis)))
 
 
