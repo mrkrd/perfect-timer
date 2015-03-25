@@ -1,6 +1,6 @@
 (ns perfect-timer.audio
   (:require [clojure.java.io :as io])
-  (:import (javax.sound.sampled AudioSystem)))
+  (:import (javax.sound.sampled AudioSystem LineListener LineEvent$Type)))
 
 
 
@@ -8,9 +8,16 @@
   (let [sound-stream (AudioSystem/getAudioInputStream sound-file)
         clip (AudioSystem/getClip)]
 
+    (.addLineListener clip (proxy [LineListener] []
+                             (update [event]
+                               (when (= (.getType event) LineEvent$Type/STOP)
+                                 (.. event getLine close)))))
+
     (doto clip
       (.open sound-stream)
-      (.start))))
+      (.start))
+
+    ))
 
 
 
