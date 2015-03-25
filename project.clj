@@ -1,4 +1,4 @@
-(defproject perfect-timer "0.2.0"
+(defproject perfect-timer "0.3.0"
   :description "A simple timer app"
   :url "https://github.com/mrkrd/perfect-timer"
   :license {:name "Eclipse Public License"
