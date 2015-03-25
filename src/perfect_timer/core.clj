@@ -77,6 +77,7 @@
   (config! input-field :background :white)
   (config! start-button :text "Start")
   (config! main-progress :value 0)
+  (request-focus! input-field)
 
   ;; State changes
   (swap! state merge {:starts [], :pauses []}))
