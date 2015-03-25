@@ -4,9 +4,9 @@
 
 * DONE Enter in the input field should activate the timer
 
-* TODO Time's up's sound
+* DONE Time's up's sound
 
-  - exception handling
+  - exception handling (canceled)
 
 
 * DONE Default windows size
