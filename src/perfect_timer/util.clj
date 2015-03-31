@@ -35,7 +35,7 @@
     (if-let [[_ hh] (re-find #"([0-9\.]+)\s*h" string)] ; 1 h
       (assoc hhmmss :hh (edn/read-string hh))
       hhmmss)
-    (if hhmmss
+    (when hhmmss
       (int (+ (* (:hh hhmmss 0) 3600000)
               (* (:mm hhmmss 0) 60000)
               (* (:ss hhmmss 0) 1000))))))
