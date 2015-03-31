@@ -1,6 +1,6 @@
 # perfect-timer
 
-A simple GUI timer app.
+A simple countdown timer.
 
 ![screenshot](./screenshot.png)
 
