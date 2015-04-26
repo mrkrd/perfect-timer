@@ -12,33 +12,30 @@
 
 
 
+(defn hhmmss-map-to-ms
+  [hhmmss]
+  (int (+ (* (:hh hhmmss 0) 3600000)
+          (* (:mm hhmmss 0) 60000)
+          (* (:ss hhmmss 0) 1000))))
+
+
 (defn time-str-to-ms
   "Convert string (e.g. 12:00, 3:30:00, 15m 30s) to milliseconds.
   Return nil, if not possible."
   [string]
-  (as-> nil hhmmss
-    (if-let [[_ ss] (re-matches #"([0-9\.]+)" string)] ; 12
-      (assoc hhmmss :ss (edn/read-string ss))
-      hhmmss)
-    (if-let [[_ mm ss] (re-matches #"([0-9]+):([0-9\.]+)" string)] ; 30:00
-      (assoc hhmmss :mm (edn/read-string mm) :ss (edn/read-string ss))
-      hhmmss)
-    (if-let [[_ hh mm ss] (re-matches #"([0-9]+):([0-9]+):([0-9\.]+)" string)] ; 1:20:00
-      (assoc hhmmss :hh (edn/read-string hh) :mm (edn/read-string mm) :ss (edn/read-string ss))
-      hhmmss)
-    (if-let [[_ mm] (re-find #"([0-9\.]+)\s*m" string)] ; 20 m
-      (assoc hhmmss :mm (edn/read-string mm))
-      hhmmss)
-    (if-let [[_ ss] (re-find #"([0-9\.]+)\s*s" string)] ; 15 s
-      (assoc hhmmss :ss (edn/read-string ss))
-      hhmmss)
-    (if-let [[_ hh] (re-find #"([0-9\.]+)\s*h" string)] ; 1 h
-      (assoc hhmmss :hh (edn/read-string hh))
-      hhmmss)
-    (when hhmmss
-      (int (+ (* (:hh hhmmss 0) 3600000)
-              (* (:mm hhmmss 0) 60000)
-              (* (:ss hhmmss 0) 1000))))))
+  (condp re-matches string
+    #"([0-9\.]+)" :>> #(hhmmss-map-to-ms {:hh 0
+                                          :mm (edn/read-string (nth % 1))
+                                          :ss 0})
+
+    #"([0-9]+):([0-9\.]+)" :>> #(hhmmss-map-to-ms {:hh 0
+                                                   :mm (edn/read-string (nth % 1))
+                                                   :ss (edn/read-string (nth % 2))})
+
+    #"([0-9]+):([0-9]+):([0-9\.]+)" :>> #(hhmmss-map-to-ms {:hh (edn/read-string (nth % 1))
+                                                            :mm (edn/read-string (nth % 2))
+                                                            :ss (edn/read-string (nth % 3))})
+    nil))
 
 
 ;; (time-str-to-ms "10:10")
