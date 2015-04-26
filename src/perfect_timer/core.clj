@@ -4,6 +4,7 @@
         [seesaw.core])
   (:require [clojure.java.io :as io]
             [seesaw.font :as font])
+  (:import (java.util Timer TimerTask))
   (:gen-class))
 
 (native!)
@@ -28,45 +29,13 @@
                               start-button reset-button]))
 
 
+
+
+
 (def state (atom {:starts []
                   :pauses []
                   :tmax default-ms}))
 
-
-
-
-
-(defn start-pressed []
-  ;; UI changes
-  (config! start-button :text "Pause")
-  (config! input-field :editable? false)
-  (config! input-field :background "#eeeeee")
-  (request-focus! start-button)
-
-  ;; State changes
-  (when (empty? (@state :starts))            ; First press?
-    (swap! state assoc-in [:tmax] (time-str-to-ms (config input-field :text)))
-    (config! main-progress :max (@state :tmax)))
-  (swap! state update-in [:starts] conj (System/currentTimeMillis)))
-
-
-
-(defn pause-pressed []
-  ;; UI changes
-  (config! start-button :text "Start")
-
-  ;; State changes
-  (swap! state update-in [:pauses] conj (System/currentTimeMillis)))
-
-
-
-(defn start-or-pause-pressed [e]
-  (if (> (count (@state :starts)) (count (@state :pauses)))
-    (pause-pressed)
-    (start-pressed)))
-
-(def start-listener (listen start-button :action #(start-or-pause-pressed %)))
-                                        ; (start-listener)
 
 
 
@@ -80,10 +49,88 @@
   (request-focus! input-field)
 
   ;; State changes
-  (swap! state merge {:starts [], :pauses []}))
+  (swap! state merge {:starts [], :pauses []})
+
+  ;; Timer
+  (.cancel (:timer @state)))
+
 
 (def reset-listener (listen reset-button :action #(reset-pressed %)))
                                         ; (reset-listener)
+
+
+
+(defn tick []
+  (let [{:keys [starts tmax pauses]} @state
+        pauses (conj pauses (System/currentTimeMillis))
+        time-passed (reduce + (map - pauses starts))]
+
+    (when (seq starts)
+      (invoke-now
+       (config! input-field :text (ms-to-time-str (- tmax time-passed)))))
+
+    (invoke-now
+     (config! main-progress :value time-passed))
+
+    (when (> time-passed tmax)
+      (reset-pressed nil)
+      (play-sound (io/input-stream (io/resource "chirps.wav")))
+      (invoke-now (alert "Time's up!"))
+      )))
+
+
+
+(defn start-pressed []
+  ;; UI changes
+  (config! start-button :text "Pause")
+  (config! input-field :editable? false)
+  (config! input-field :background "#eeeeee")
+  (request-focus! start-button)
+
+  ;; The first press?
+  (when (empty? (@state :starts))
+    (swap! state assoc-in [:tmax] (time-str-to-ms (config input-field :text)))
+    (config! main-progress :max (@state :tmax)))
+
+  ;; State changes
+  (swap! state update-in [:starts] conj (System/currentTimeMillis))
+
+  (let [{:keys [starts tmax pauses]} @state
+        time-passed (reduce + (map - pauses starts))
+        now (System/currentTimeMillis)
+        delay (- 1000 (rem now 1000))
+        task (proxy [TimerTask] [] (run [] (tick)))
+        timer (new Timer)]
+    (if (:timer @state)                 ;just in case
+      (.cancel (:timer @state)))
+    (swap! state assoc :timer timer)
+    (.scheduleAtFixedRate timer task delay 1000))
+)
+
+
+
+(defn pause-pressed []
+  ;; UI changes
+  (config! start-button :text "Start")
+
+  ;; State changes
+  (swap! state update-in [:pauses] conj (System/currentTimeMillis))
+
+  ;; Timer
+  (.cancel (:timer @state)))
+
+
+
+(defn start-or-pause-pressed [e]
+  (if (> (count (@state :starts)) (count (@state :pauses)))
+    (pause-pressed)
+    (start-pressed)))
+
+(def start-listener (listen start-button :action #(start-or-pause-pressed %)))
+                                        ; (start-listener)
+
+
+
 
 
 
@@ -103,21 +150,6 @@
 
 
 
-(defn tick []
-  (let [{:keys [starts tmax pauses]} @state
-        pauses (conj pauses (System/currentTimeMillis))
-        time-passed (reduce + (map - pauses starts))]
-
-    (when (seq starts)
-      (config! input-field :text (ms-to-time-str (- tmax time-passed))))
-
-    (config! main-progress :value time-passed)
-
-    (when (> time-passed tmax)
-      (reset-pressed nil)
-      (play-sound (io/input-stream (io/resource "chirps.wav")))
-      (alert "Time's up!")
-      )))
 
 
 
@@ -131,7 +163,4 @@
      :height 320
      :content grid)
     ;; pack!
-    show!))
-
-  (swap! state assoc :main-timer (timer (fn [e] (tick)) :delay 200)))
-;; (.stop (:main-timer @state))
+    show!)))
