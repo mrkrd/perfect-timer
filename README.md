@@ -20,16 +20,20 @@ A simple countdown timer.
 
 ## Installation
 
-1. Install Clojure and [Leiningen] (https://github.com/technomancy/leiningen).
+1. Install Clojure and [Boot] (http://boot-clj.com/).
 
 2. Check out the git repo:
 
         git clone https://github.com/mrkrd/perfect-timer.git
         cd perfect-timer
 
-3. Run using Leiningen:
+3. Compile:
 
-        lein run
+        boot build
+
+4. Run:
+
+        java -jar target/project.jar
 
 
 
