@@ -8,7 +8,7 @@
 (task-options!
  aot {:namespace '#{perfect-timer.core}}
  pom {:project 'perfect-timer
-      :version "0.3.0"}
+      :version "0.4.0"}
  jar {:main 'perfect-timer.core}
  target {:dir #{"target"}}
 )
