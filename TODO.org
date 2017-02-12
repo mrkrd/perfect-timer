@@ -30,7 +30,7 @@ https://www.reddit.com/r/Clojure/comments/2ziogi/perfecttimer_my_first_clojure_a
   uberjar` worked.
 
   I needed to move `timer` to `-main`.
-* Fix: ms int out of range
+* TODO Fix: ms int out of range
 
   e.g. 123123123 h
 
@@ -39,4 +39,4 @@ https://www.reddit.com/r/Clojure/comments/2ziogi/perfecttimer_my_first_clojure_a
 [[file:test/perfect_timer/util_test.clj]]
 
 * DONE Use Timer.scheduleAtFixedRate instead of the Swing timer
-* Run test with Boot
+* TODO Run test with Boot
